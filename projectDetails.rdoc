@@ -1,0 +1,25 @@
+Build a game
+
+This game will be similar to asteroids, it wants rocks that have tracing to the player
+
+limited bullets, specified in the future
+  destroy rocks/packs or whatever for more bullets
+limited lives
+
+leaderboard set of scores, player name/scores -> score system to be implemented
+
+User will log in with social media link.  It will need to be authenticated by another like facebook or google.
+
+Also be able to save the state of the current game.  
+  -Amount of lives, bullets, etc.
+  
+Perhaps for later, Reporting aspect, like avg. play time, high score etc.
+
+Some Specs:
+3 lives 10 bullets
+google user social media authentication
+more lives based on points
+arrow keys + spacebar
+
+
+
