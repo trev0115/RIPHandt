@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Trevor Barribeau
+  email: trev0115@gmail.com
+  score: 1
+  savedScore: 2
+  highScore: 3
+
+two:
+  name: MyString
+  email: MyString
+  score: 1
+  savedScore: 1
+  highScore: 1
