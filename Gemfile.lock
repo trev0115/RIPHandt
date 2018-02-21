@@ -137,6 +137,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    rb-readline (0.5.5)
     rdoc (4.3.0)
     sass (3.5.5)
       sass-listen (~> 4.0.0)
@@ -189,6 +190,7 @@ DEPENDENCIES
   omniauth-google-oauth2 (~> 0.2.1)
   phaser-rails (~> 2.6, >= 2.6.2.0)
   rails (= 4.2.6)
+  rb-readline
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring
