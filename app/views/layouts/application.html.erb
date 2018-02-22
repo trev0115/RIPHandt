@@ -6,7 +6,7 @@
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= csrf_meta_tags %>
   </head>
-  <body>
+  <body onload="gameStart()">
     <div>
       <% if current_user %>
         Signed in as <strong><%= current_user.name %></strong>!
