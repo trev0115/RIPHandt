@@ -25,9 +25,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # for google authentication
 gem "omniauth-google-oauth2", "~> 0.2.1"
-
-gem 'phaser-rails', '~> 2.6', '>= 2.6.2.0'
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
