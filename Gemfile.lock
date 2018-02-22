@@ -188,7 +188,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   omniauth-google-oauth2 (~> 0.2.1)
-  phaser-rails (~> 2.6, >= 2.6.2.0)
+  phaser-rails
   rails (= 4.2.6)
   rb-readline
   sass-rails (~> 5.0)

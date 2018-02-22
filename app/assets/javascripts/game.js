@@ -20,7 +20,7 @@ gameState.prototype = {
     preload: function () {
 		game.load.image("space", 'images/space.png');
 		
-        game.load.spritesheet('ship', 'images/spaceShip.png', 110, 170);
+    game.load.spritesheet('ship', 'images/spaceShip.png', 110, 170);
 		game.load.spritesheet('laser', 'images/lazer.png');
 		game.load.spritesheet('asteroid', 'images/asteroid.png', 64 , 64);
     },
