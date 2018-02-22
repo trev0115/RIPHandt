@@ -2,7 +2,7 @@
 
 function gameStart() {
 	
-	var game = new Phaser.Game(400, 400, Phaser.CANVAS, '', {preload : preload, create: create, update: update});
+	var game = new Phaser.Game(400, 400, Phaser.CANVAS, '', {preload: preload, create: create, update: update});
 	
 	var ship;
 	//var fireButton;
@@ -10,8 +10,8 @@ function gameStart() {
 	
 	// preload our assets such as images/sounds
 	function preload() {
-		game.load.image('spaceship', './images/spaceShip.png');
-		game.load.image('laser', './images/lazer.png');
+		game.load.image('spaceship', 'spaceship.png');
+		game.load.image('laser', 'laser.png');
 		
 		
 	} // end preload()
