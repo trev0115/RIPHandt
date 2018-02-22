@@ -1,2 +1,17 @@
 <h1>Game Home Page</h1>
+<h1>Leaderboards:</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th colspan="2">&nbsp;</th>
+  </tr>
+  
+  <% @users.each do |user| %>
+  <tr>
+    <td><%= user.name %></td>
+    <td><%= user.email %></td>
+  </tr>
+  <% end %>
+ </table>
 <div id="gameDiv"></div>
