@@ -1,3 +1,5 @@
+
+
 function gameStart() {
 	
 	var game = new Phaser.Game(1200, 800, Phaser.CANVAS, '', {preload : preload, create: create, update: update});
@@ -8,8 +10,8 @@ function gameStart() {
 	
 	// preload our assets such as images/sounds
 	function preload() {
-		game.load.image('spaceship', 'assets/spaceship.png');
-		game.load.image('laser', 'assets/laser.png');
+		game.load.image('spaceship', 'images/spaceship.png');
+		game.load.image('laser', 'images/laser.png');
 		
 		
 	} // end preload()
