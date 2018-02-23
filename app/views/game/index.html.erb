@@ -1,6 +1,5 @@
 
 <head>
-  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
   <script type="text/javascript" src="../assets/javascripts/phaser.min.js"></script> 
   <script type="text/javascript" src="../assets/javascripts/game.js"></script>
 </head>
@@ -12,27 +11,7 @@
         <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
       <% end %>
 </div>
-<div id="google"></div>
-  <script>
-    function onSuccess(googleUser) {
-      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-    }
-    function onFailure(error) {
-      console.log(error);
-    }
-    function renderButton() {
-      gapi.signin2.render('google', {
-        'scope': 'profile email',
-        'width': 240,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-        'onsuccess': onSuccess,
-        'onfailure': onFailure
-      });
-    }
-  </script>
-  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
 <h1>Game Home Page</h1>
 <h1>Leaderboards:</h1>
 <table>
