@@ -1,0 +1,174 @@
+console.log('helo');
+
+function gameStart() {
+  
+	// our game function
+	
+	var gameHeight = 800;
+	var gameWidth = 600;
+	
+	var laserTime = 0;
+	var ship;
+	var cursors;
+
+	var laser;
+	var lasers;
+	var laserLifeSpan = 2000;  
+	
+	var defaultShipSize = .25;
+	
+
+	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
+	var game = new Phaser.Game(gameHeight, gameWidth, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+	
+
+	//
+	// pre load function, please place all code that needs to be preloaded here
+	//
+	function preload() {
+
+		game.load.image('space', '<%= asset_path('space.png') %>');
+		game.load.image('laser', '<%= asset_path('laser.png') %>');
+		game.load.image('spaceship', '<%= asset_path('spaceship.png') %>');
+
+
+	} // end of preload()
+
+	//
+	// create function: please place all create functions here
+	// 
+	function create() {
+
+		// Make the game a bit faster on load
+		game.renderer.clearBeforeRender = false;
+		game.renderer.roundPixels = true;
+
+		// arcade physics
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		// create a background
+		game.add.tileSprite(0, 0, game.width, game.height, 'space');
+
+		// our ships lasers
+		lasers = game.add.group();
+		lasers.enableBody = true;
+		lasers.physicsBodyType = Phaser.Physics.ARCADE;
+
+		// create 10 bullets
+		lasers.createMultiple(10, 'laser');
+		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
+		lasers.setAll('anchor.y', 0.5);
+
+		// our ship
+		ship = game.add.sprite(gameHeight/2, gameWidth/2, 'spaceship'); // add shp to middle of the page
+		ship.anchor.set(0.5); // anchor point will be the center of the ship
+		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
+		
+		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
+		
+
+		// game input
+		cursors = game.input.keyboard.createCursorKeys();
+		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+
+
+
+
+	} // end of create()
+
+
+	//
+	// update function: please place all update functions here
+	//
+	function update() {
+
+		// when pressing up, we go forward, we need to face backwards and press up to slow down
+		if (cursors.up.isDown) 
+		{
+				game.physics.arcade.accelerationFromRotation(ship.rotation, 200, ship.body.acceleration);
+		}
+		
+		else
+		{
+				ship.body.acceleration.set(0);
+		}
+
+		if (cursors.left.isDown)
+		{
+				ship.body.angularVelocity = -200;
+			
+		}
+		else if (cursors.right.isDown)
+		{
+				ship.body.angularVelocity = 200;
+		}
+		else
+		{
+				ship.body.angularVelocity = 0;
+		}
+
+		if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+		{
+				fireLasers();
+		}
+		screenWrap(ship);
+
+		lasers.forEachExists(screenWrap, this);
+		
+		
+		function fireLasers() {
+			
+			if (game.time.now > laserTime) 
+			{
+				laser = lasers.getFirstExists(false);
+				
+				if (laser)
+				{
+					laser.reset(ship.body.x + 16, ship.body.y + 16);
+          laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
+          laser.rotation = ship.rotation;
+          game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
+          laserTime = game.time.now + 50;
+				}
+			}
+		}
+		
+
+	} // end of update()
+	
+	// screen 
+	function screenWrap (sprite) {
+
+    if (sprite.x < 0)
+    {
+        sprite.x = game.width;
+    }
+    else if (sprite.x > game.width)
+    {
+        sprite.x = 0;
+    }
+
+    if (sprite.y < 0)
+    {
+        sprite.y = game.height;
+    }
+    else if (sprite.y > game.height)
+    {
+        sprite.y = 0;
+    }
+
+}
+
+
+
+
+
+	//
+	// render function
+	//
+
+	function render() {
+
+	} // end of render()
+
+}// end of gameStart()
