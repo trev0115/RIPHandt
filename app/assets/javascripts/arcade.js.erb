@@ -17,6 +17,7 @@ function gameStart() {
 	
 	var defaultShipSize = .25;
 	
+	
 
 	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
 	var game = new Phaser.Game(gameHeight, gameWidth, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
@@ -67,7 +68,12 @@ function gameStart() {
 		
 		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
 		
-		asteroid = game.add.sprite(200, 300, 'asteroid');
+		asteroid = game.add.sprite(Math.random()*900, Math.random()*500, 'asteroid');
+	
+	
+	
+	    game.physics.arcade.enable(asteroid);
+		
 
 		// game input
 		cursors = game.input.keyboard.createCursorKeys();
@@ -84,8 +90,12 @@ function gameStart() {
 	//
 	function update() {
 	    
+	    game.physics.arcade.moveToObject(asteroid, ship, 50);
 
+		
 		// when pressing up, we go forward, we need to face backwards and press up to slow down
+		
+		
 		if (cursors.up.isDown) 
 		{
 				game.physics.arcade.accelerationFromRotation(ship.rotation, 200, ship.body.acceleration);
@@ -130,10 +140,10 @@ function gameStart() {
 				    
 				    laser.scale.setTo(0.3, 0.3);
 					laser.reset(ship.body.x + 40, ship.body.y + 13);
-          laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
-          laser.rotation = ship.rotation;
-          game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-          laserTime = game.time.now + 50;
+                    laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
+                    laser.rotation = ship.rotation;
+                    game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
+                  laserTime = game.time.now + 50;
 				}
 			}
 		}
@@ -162,11 +172,9 @@ function gameStart() {
         sprite.y = 0;
     }
 
+
+
 }
-
-
-
-
 
 	//
 	// render function
