@@ -13,7 +13,7 @@ function gameStart() {
 
 	var laser;
 	var lasers;
-	var laserLifeSpan = 2000;  
+	var laserLifeSpan = 1500;  
 	
 	var defaultShipSize = .25;
 	
@@ -31,6 +31,7 @@ function gameStart() {
 		game.load.image('laser', '<%= asset_path('laser.png') %>');
 		game.load.image('spaceship', '<%= asset_path('spaceship.png') %>');
 
+        game.load.image('asteroid', '<%= asset_path('asteroid.png') %>');
 
 	} // end of preload()
 
@@ -66,6 +67,7 @@ function gameStart() {
 		
 		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
 		
+		asteroid = game.add.sprite(200, 300, 'asteroid');
 
 		// game input
 		cursors = game.input.keyboard.createCursorKeys();
@@ -81,6 +83,7 @@ function gameStart() {
 	// update function: please place all update functions here
 	//
 	function update() {
+	    
 
 		// when pressing up, we go forward, we need to face backwards and press up to slow down
 		if (cursors.up.isDown) 
@@ -124,7 +127,9 @@ function gameStart() {
 				
 				if (laser)
 				{
-					laser.reset(ship.body.x + 16, ship.body.y + 16);
+				    
+				    laser.scale.setTo(0.3, 0.3);
+					laser.reset(ship.body.x + 40, ship.body.y + 13);
           laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
           laser.rotation = ship.rotation;
           game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
