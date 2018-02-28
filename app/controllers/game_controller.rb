@@ -1,10 +1,10 @@
 class GameController < ApplicationController
   
   def index
-    @users = GameDatum.all
+    @users = User.all
   end
   
   def new 
-   @user = GameDatum.new
+   @user = User.new
   end
 end
