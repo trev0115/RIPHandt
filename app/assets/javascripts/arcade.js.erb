@@ -17,6 +17,7 @@ function gameStart() {
 	
 	var defaultShipSize = .25;
 	
+	var points = 0;
 	
 
 	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
@@ -32,7 +33,7 @@ function gameStart() {
 		game.load.image('laser', '<%= asset_path('laser.png') %>');
 		game.load.image('spaceship', '<%= asset_path('spaceship.png') %>');
 
-        game.load.image('asteroid', '<%= asset_path('asteroid.png') %>');
+    game.load.image('asteroid', '<%= asset_path('asteroid.png') %>');
 
 	} // end of preload()
 
@@ -72,7 +73,7 @@ function gameStart() {
 	
 	
 	
-	    game.physics.arcade.enable(asteroid);
+	  game.physics.arcade.enable(asteroid);
 		
 
 		// game input
@@ -148,10 +149,14 @@ function gameStart() {
 			}
 		}
 		
+		game.physics.arcade.overlap(lasers, asteroid, bulletCollider, null, this);
+		game.physics.arcade.overlap(ship, asteroid, collisionHandler, null, this); 
+		
+	
 
 	} // end of update()
 	
-	// screen 
+	// screenWrap
 	function screenWrap (sprite) {
 
     if (sprite.x < 0)
@@ -172,9 +177,21 @@ function gameStart() {
         sprite.y = 0;
     }
 
+}// end of of screenWrap
 
-
+function collisionHandler(spaceship, asteroid) {
+  spaceship.kill();
+  asteroid.kill();
 }
+
+function bulletCollider(lasers, asteroid) {
+  lasers.kill();
+  asteroid.kill();
+  points +=1;
+  console.log("pionts = " + points);
+}
+
+
 
 	//
 	// render function
