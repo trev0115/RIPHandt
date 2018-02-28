@@ -1,15 +1,25 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  provider: MyString
+  profile_image: MyString
   uid: MyString
+  provider: MyString
   name: MyString
-  oauth_token: MyString
-  oauth_expires_at: 2018-02-14 22:25:11
+  token: MyString
+  secret: MyString
+  email: MyString
+  lives: 1
+  bullets: 1
+  saved_score: 1
 
 two:
-  provider: MyString
+  profile_image: MyString
   uid: MyString
+  provider: MyString
   name: MyString
-  oauth_token: MyString
-  oauth_expires_at: 2018-02-14 22:25:11
+  token: MyString
+  secret: MyString
+  email: MyString
+  lives: 1
+  bullets: 1
+  saved_score: 1
