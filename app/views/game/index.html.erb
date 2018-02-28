@@ -17,13 +17,15 @@
   <tr>
     <th>Name</th>
     <th>Email</th>
+    <th>Score</th>
     <th colspan="2">&nbsp;</th>
   </tr>
   
-  <% @users.each do |user| %>
+  <% @scores.limit(10).order('score desc').each do |score| %> 
   <tr>
-    <td><%= user.name %></td>
-    <td><%= user.email %></td>
+    <td><%= score.user.name %></td>
+    <td>@email.com></td>
+    <td><%= score.score %></td> 
   </tr>
   <% end %>
  </table>
