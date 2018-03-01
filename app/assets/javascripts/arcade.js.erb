@@ -1,11 +1,11 @@
-console.log('helo');
+
 
 function gameStart() {
   
 	// our game function
 	
-	var gameHeight = 800;
-	var gameWidth = 600;
+	var gameHeight = 600;
+	var gameWidth = 800;
 	
 	var laserTime = 0;
 	var ship;
@@ -18,10 +18,14 @@ function gameStart() {
 	var defaultShipSize = .25;
 	
 	var points = 0;
+	var defaultLaserNumber = 10;
+	
+	var score = 0;
+	var scoreText;
 	
 
 	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
-	var game = new Phaser.Game(gameHeight, gameWidth, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+	var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
 	
 
 	//
@@ -58,7 +62,7 @@ function gameStart() {
 		lasers.physicsBodyType = Phaser.Physics.ARCADE;
 
 		// create 10 bullets
-		lasers.createMultiple(10, 'laser');
+		lasers.createMultiple(defaultLaserNumber, 'laser');
 		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
 		lasers.setAll('anchor.y', 0.5);
 
@@ -66,15 +70,13 @@ function gameStart() {
 		ship = game.add.sprite(gameHeight/2, gameWidth/2, 'spaceship'); // add shp to middle of the page
 		ship.anchor.set(0.5); // anchor point will be the center of the ship
 		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
-		
 		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
 		
 		asteroid = game.add.sprite(Math.random()*900, Math.random()*500, 'asteroid');
-	
-	
-	
 	  game.physics.arcade.enable(asteroid);
 		
+		// Create score text
+		createScore();
 
 		// game input
 		cursors = game.input.keyboard.createCursorKeys();
@@ -121,10 +123,16 @@ function gameStart() {
 				ship.body.angularVelocity = 0;
 		}
 
-		if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-		{
-				fireLasers();
-		}
+  	
+  if (ship.visible) {
+  	
+  	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+  		{
+  				fireLasers();
+  		}
+  }
+ 
+  	
 		screenWrap(ship);
 
 		lasers.forEachExists(screenWrap, this);
@@ -187,10 +195,29 @@ function collisionHandler(spaceship, asteroid) {
 function bulletCollider(lasers, asteroid) {
   lasers.kill();
   asteroid.kill();
-  points +=1;
-  console.log("pionts = " + points);
+  score +=1;
+  scoreText.text = score;
+  console.log("pionts = " + score);
 }
 
+// create score text
+function createScore() {
+	
+	gameScoreText = game.add.text(gameWidth - 150, 10, 'Score:', {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "left"
+	});
+	
+	scoreText = game.add.text(gameWidth - 50, 30, '0', {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "center"
+	});
+	
+	scoreText.anchor.setTo(0.5, 0.5);
+	
+}
 
 
 	//
