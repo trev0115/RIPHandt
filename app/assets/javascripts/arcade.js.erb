@@ -12,13 +12,14 @@ function gameStart() {
 
 	var laser;
 	var lasers;
-	var laserLifeSpan = 1500; 
+	var laserLifeSpan = 1500;
 	var defaultLaserSpeed = 500;
+	var laserSpeed = 500;
 	
 	var defaultShipSize = .25;
 	
 	var points = 0;
-	var defaultLaserNumber = 10;
+	var defaultLaserNumber = 20;
 	
 	var score = 0;
 	var scoreText;
@@ -190,7 +191,7 @@ function gameStart() {
                     laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
                     laser.rotation = ship.rotation;
                     game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-                  laserTime = game.time.now + defaultLaserSpeed;
+                  laserTime = game.time.now + laserSpeed;
 				}
 			}
 		}
@@ -262,7 +263,7 @@ function gameStart() {
   
   function powerUpCookie(ship, cookie) {
     cookie.kill();
-    defaultLaserSpeed = 100;
+    laserSpeed = 100;
     
     
   }
@@ -324,6 +325,7 @@ function gameStart() {
         gameOver.visible = false;
         spaceToRestart.visible = false;
         score = 0;
+        laserSpeed = defaultLaserSpeed;
         scoreText.text = score;
         createCookie();
         createShip();
