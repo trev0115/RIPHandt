@@ -113,7 +113,7 @@ function gameStart() {
     gameOver.anchor.setTo(0.5, 0.5);
     gameOver.visible = false;
     
-    spaceToRestart = game.add.text(game.world.centerX, game.world.centerY + 100, 'Press Space to Restart', {
+    spaceToRestart = game.add.text(game.world.centerX, game.world.centerY + 100, 'Press Mouse Button to Restart', {
       font: "50px Gabriella",
   		fill: "#FFFFFF",
   		align: "center"
@@ -314,7 +314,7 @@ function gameStart() {
   
   function restart() {
     if (!ship.alive) {
-      if (fireButton.isDown) {
+      if (game.input.activePointer.leftButton.isDown) {
         gameOver.visible = false;
         spaceToRestart.visible = false;
         score = 0;
