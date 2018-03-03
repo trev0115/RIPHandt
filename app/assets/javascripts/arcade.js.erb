@@ -12,17 +12,20 @@ function gameStart() {
 
 	var laser;
 	var lasers;
-	var laserLifeSpan = 1500;
+	var laserLifeSpan = 1200;
 	var defaultLaserSpeed = 500;
 	var laserSpeed = 500;
 	
 	var defaultShipSize = .25;
 	
 	var points = 0;
-	var defaultLaserNumber = 20;
+	var defaultLaserNumber = 5;
 	
 	var score = 0;
 	var scoreText;
+	
+	var shipHealth = 3;
+	var healthText;
 	
 	var asteroids;
 	
@@ -97,6 +100,13 @@ function gameStart() {
 		
 		// Create score text
 		createScore();
+		
+		//create health text
+		
+		createHealth();
+		
+		//create ammo text
+		createAmmo();
 
 		// game input
 		cursors = game.input.keyboard.createCursorKeys();
@@ -178,7 +188,7 @@ function gameStart() {
 		
 		
 		function fireLasers() {
-			
+		 
 			if (game.time.now > laserTime) 
 			{
 				laser = lasers.getFirstExists(false);
@@ -186,12 +196,14 @@ function gameStart() {
 				if (laser)
 				{
 				    
-				  laser.scale.setTo(0.3, 0.3);
-					laser.reset(ship.body.x + 40, ship.body.y + 13);
-                    laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
-                    laser.rotation = ship.rotation;
-                    game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-                  laserTime = game.time.now + laserSpeed;
+				        laser.scale.setTo(0.3, 0.3);
+					    laser.reset(ship.body.x + 40, ship.body.y + 13);
+                        laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
+                        laser.rotation = ship.rotation;
+                        game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
+                        laserTime = game.time.now + laserSpeed;
+                        //ammoText.text = default
+
 				}
 			}
 		}
@@ -248,9 +260,20 @@ function gameStart() {
 }// end of of screenWrap
 
   function collisionHandler(spaceShip, asteroid) {
-    spaceShip.kill();
-    asteroid.kill();
+      
+     if(shipHealth >= 1){
+         
+         shipHealth -=1;
+         
+     }else{
+        spaceShip.kill();
+     };
+     asteroid.kill();
+     healthText.text = shipHealth;
     
+  }
+  function killShip(){
+      spaceShip.kill();
   }
   
   function bulletCollider(lasers, asteroid) {
@@ -259,12 +282,18 @@ function gameStart() {
     score +=1;
     scoreText.text = score;
     console.log("points = " + score);
+    if(score == 20 || score == 35){
+        shipHealth +=1;
+    }
+    healthText.text = shipHealth;
+    
   }
   
   function powerUpCookie(ship, cookie) {
     cookie.kill();
     laserSpeed = 100;
-    
+    shipHealth += 2;
+    healthText.text = shipHealth;
     
   }
   
@@ -300,7 +329,39 @@ function gameStart() {
 		game.physics.arcade.enable(cookie);
 		cookie.scale.setTo(.1, .1);
   }
+  function createHealth(){
+    
+    gameHealthText = game.add.text(gameWidth - 450, 10, 'Health:', {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "left"
+	});
+	
+	healthText = game.add.text(gameWidth - 350, 32 , shipHealth, {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "center"
+	});
+	
+	healthText.anchor.setTo(0.5, 0.5)
+}
 
+function createAmmo(){
+    
+    gameAmmoText = game.add.text(gameWidth - 700, 10, 'Ammo:', {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "left"
+	});
+	
+	ammoText = game.add.text(gameWidth - 600, 32 , defaultLaserNumber, {
+		font: "28px Gabriella",
+		fill: "#FFFFFF",
+		align: "center"
+	});
+	
+	ammoText.anchor.setTo(0.5, 0.5)
+}
   function launchAsteroid() {
     var asteroidSpeed = 200;
     var minAsteroidSpawn = 300;
@@ -325,8 +386,10 @@ function gameStart() {
         gameOver.visible = false;
         spaceToRestart.visible = false;
         score = 0;
+        shipHealth = 3;
         laserSpeed = defaultLaserSpeed;
-        scoreText.text = score;
+        healthText.Text = shipHealth;
+        scoreText.text = shipHealth;
         createCookie();
         createShip();
       }
