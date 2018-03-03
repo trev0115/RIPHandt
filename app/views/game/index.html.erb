@@ -1,33 +1,37 @@
 
 <head>
 
-</head>
-<div id="google">
+  <div id="google">
       <% if current_user %>
         Signed in as <strong><%= current_user.name %></strong>!
         <%= link_to "Sign out", signout_path, id: "sign_out" %>
       <% else %>
         <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
       <% end %>
-</div>
+  </div>
 
-<h1>Game Home Page</h1>
+</head>
 
-<div id="gameDiv"></div>
+<body>
 
-<h1>Leaderboards:</h1>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Score</th>
-    <th colspan="2">&nbsp;</th>
-  </tr>
+  <h1>Game Home Page</h1>
   
-  <% @scores.limit(10).order('score desc').each do |score| %> 
-  <tr>
-    <td><%= score.user.name %></td>
-    <td><%= score.score %></td> 
-  </tr>
-  <% end %>
- </table>
-
+  <div id="gameDiv"></div>
+  
+  <h1>Leaderboards:</h1>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Score</th>
+      <th colspan="2">&nbsp;</th>
+    </tr>
+    
+    <% @scores.limit(10).order('score desc').each do |score| %> 
+      <tr>
+        <td><%= score.user.name %></td>
+        <td><%= score.score %></td> 
+      </tr>
+    <% end %>
+   </table>
+   
+</body>
