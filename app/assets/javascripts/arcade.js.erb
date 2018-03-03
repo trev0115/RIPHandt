@@ -37,6 +37,7 @@ function gameStart() {
 	var maxSpeed = 400;
 	
 	var sheilds;
+	
 
 	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
 	var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render});
@@ -92,8 +93,8 @@ function gameStart() {
 		asteroids.createMultiple(8, 'asteroid');
 		asteroids.setAll('outOfBoundsKill', true);
 		asteroids.setAll('checkWorldBounds', true);
-		launchAsteroid();
-		
+		//launchAsteroid();
+		leftAsteroid();
 		
 		createCookie();
 		
@@ -408,7 +409,7 @@ function createAmmoText(){
     var asteroid = asteroids.getFirstExists(false);
     game.physics.arcade.enable(asteroid);
     if (asteroid) {
-      asteroid.reset(game.rnd.integerInRange(0 , game.width), game.height);
+      asteroid.reset(game.rnd.integerInRange(0 , game.width), -20);
       asteroid.body.velocity.x = game.rnd.integerInRange(-300, 300);
       asteroid.body.velocity.y = asteroidSpeed;
       game.physics.arcade.moveToXY(asteroid, ship.body.x, ship.body.y, Math.random() * 300 + 200);
@@ -416,6 +417,27 @@ function createAmmoText(){
     
     game.time.events.add(game.rnd.integerInRange(minAsteroidSpawn, maxAsteroidSpawn), launchAsteroid);
     
+  }
+  function leftAsteroid(){
+    var asteroidSpeed = Math.random() * 300 + 200;
+    var minAsteroidSpawn = 300;
+    var maxAsteroidSpawn = 3000;
+    
+    
+    var asteroid = asteroids.getFirstExists(false);
+    game.physics.arcade.enable(asteroid);
+    if (asteroid) {
+      asteroid.reset(game.rnd.integerInRange(0, game.width),game.rnd.integerInRange(0 , game.height));
+      asteroid.body.velocity.x = game.rnd.integerInRange(-300, 300);
+      asteroid.body.velocity.y = asteroidSpeed;
+      game.physics.arcade.moveToXY(asteroid, ship.body.x, ship.body.y, Math.random() * 300 + 200);
+    }
+    
+    game.time.events.add(game.rnd.integerInRange(minAsteroidSpawn, maxAsteroidSpawn), launchAsteroid);
+      
+  }
+  function rightAsteroid(){
+      
   }
   
   function restart() {
