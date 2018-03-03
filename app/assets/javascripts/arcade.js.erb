@@ -131,6 +131,8 @@ function gameStart() {
 	//
 	function update() {
 	  
+	  healthText.text = shipHealth;
+	  
 	  spaceBackground.tilePosition.y += 1;
 	  screenWrap(ship);
 	  
@@ -326,7 +328,7 @@ function gameStart() {
   }
   
   function createShip() {
-    shipHealth = 5;
+    shipHealth = 3;
     ship = game.add.sprite(game.world.centerX, game.world.centerY, 'spaceship'); // add shp to middle of the page
 		ship.anchor.setTo(0.5, 0.5); // anchor point will be the center of the ship
 		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
@@ -396,7 +398,7 @@ function createAmmoText(){
         gameOver.visible = false;
         spaceToRestart.visible = false;
         score = 0;
-        shipHealth = 5;
+        shipHealth = 3;
         laserSpeed = defaultLaserSpeed;
         healthText.Text = shipHealth;
         scoreText.text = score;
