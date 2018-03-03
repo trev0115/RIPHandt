@@ -72,18 +72,8 @@ function gameStart() {
 		spaceBackground = game.add.tileSprite(0, 0, game.width, game.height, 'space');
 
 		// our ships lasers
-		lasers = game.add.group();
-		lasers.enableBody = true;
-		lasers.physicsBodyType = Phaser.Physics.ARCADE;
 
-
-
-
-		// create 10 bullets
-		lasers.createMultiple(defaultLaserNumber, 'laser');
-		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
-		lasers.setAll('anchor.y', 0.5);
-		
+		laserCreate();
 		
 		
 		// our ship
@@ -214,7 +204,6 @@ function gameStart() {
 				}
 			}
 		}else{
-		    laser = lasers.kill();
 		    ammoOut = game.add.text(game.world.centerX, game.world.centerY - 100, 'Out Of Bullets', {
             font: "60px Gabriella",
   		    fill: "#FFFFFF",
@@ -290,6 +279,15 @@ function gameStart() {
      asteroid.kill();
      healthText.text = shipHealth;
     
+  }
+  function laserCreate(){
+		lasers = game.add.group();
+		lasers.enableBody = true;
+		lasers.physicsBodyType = Phaser.Physics.ARCADE;
+
+		lasers.createMultiple(5, 'laser');
+		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
+		lasers.setAll('anchor.y', 0.5);
   }
 
   function bulletCollider(lasers, asteroid) {
@@ -406,9 +404,12 @@ function createAmmo(){
         spaceToRestart.visible = false;
         score = 0;
         shipHealth = 3;
+
+        defaultLaserNumber = 5;
         laserSpeed = defaultLaserSpeed;
         healthText.Text = shipHealth;
-        scoreText.text = shipHealth;
+        scoreText.text = '3';
+
         createCookie();
         createShip();
       }
