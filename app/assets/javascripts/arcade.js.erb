@@ -94,6 +94,7 @@ function gameStart() {
 		asteroids.setAll('checkWorldBounds', true);
 		launchAsteroid();
 		
+		
 		createCookie();
 		
 		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -195,12 +196,12 @@ function gameStart() {
 				{
 				  defaultLaserNumber--;
 				    
-				  laser.scale.setTo(0.3, 0.3);
-					laser.reset(ship.body.x + 40, ship.body.y + 13);
-          laser.lifespan = laserLifeSpan; // how long the lasers last ( we can set a global variable for this)
-          laser.rotation = ship.rotation;
-          game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-          laserTime = game.time.now + laserSpeed;
+				    laser.scale.setTo(0.3, 0.3);
+				    laser.reset(ship.body.x + 40, ship.body.y + 13);
+                    laser.lifespan = laserLifeSpan; // how long the lasers last ( we can set a global variable for this)
+                    laser.rotation = ship.rotation;
+                    game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
+                    laserTime = game.time.now + laserSpeed;
 
 				}
 			}
@@ -340,7 +341,7 @@ function gameStart() {
   }
   
   function createShip() {
-    shipHealth = 3;
+    shipHealth = 20;
     ship = game.add.sprite(game.world.centerX, game.world.centerY, 'spaceship'); // add shp to middle of the page
 		ship.anchor.setTo(0.5, 0.5); // anchor point will be the center of the ship
 		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
@@ -399,7 +400,7 @@ function createAmmoText(){
 	ammoText.anchor.setTo(0.5, 0.5)
 }
   function launchAsteroid() {
-    var asteroidSpeed = 200;
+    var asteroidSpeed = Math.random() * 300 + 200;
     var minAsteroidSpawn = 300;
     var maxAsteroidSpawn = 3000;
     
@@ -407,9 +408,10 @@ function createAmmoText(){
     var asteroid = asteroids.getFirstExists(false);
     game.physics.arcade.enable(asteroid);
     if (asteroid) {
-      asteroid.reset(game.rnd.integerInRange(0, game.width), -20);
+      asteroid.reset(game.rnd.integerInRange(0 , game.width), game.height);
       asteroid.body.velocity.x = game.rnd.integerInRange(-300, 300);
       asteroid.body.velocity.y = asteroidSpeed;
+      game.physics.arcade.moveToXY(asteroid, ship.body.x, ship.body.y, Math.random() * 300 + 200);
     }
     
     game.time.events.add(game.rnd.integerInRange(minAsteroidSpawn, maxAsteroidSpawn), launchAsteroid);
