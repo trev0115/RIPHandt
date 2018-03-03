@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228223526) do
+ActiveRecord::Schema.define(version: 20180303052852) do
 
   create_table "scores", force: :cascade do |t|
-    t.string   "user_id"
-    t.string   "score"
-    t.string   "integer"
+    t.integer  "user_id"
+    t.integer  "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
