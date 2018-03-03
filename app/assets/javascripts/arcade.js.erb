@@ -72,14 +72,7 @@ function gameStart() {
 		spaceBackground = game.add.tileSprite(0, 0, game.width, game.height, 'space');
 
 		// our ships lasers
-		lasers = game.add.group();
-		lasers.enableBody = true;
-		lasers.physicsBodyType = Phaser.Physics.ARCADE;
-
-		// create lasers
-		lasers.createMultiple(defaultLaserNumber, 'laser');
-		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
-		lasers.setAll('anchor.y', 0.5);
+		createLasers();
 		
 		// our ship
 		createShip();
@@ -336,6 +329,18 @@ function gameStart() {
 		ship.body.maxVelocity.setTo(maxSpeed, maxSpeed);
   }
   
+	function createLasers() {
+  	lasers = game.add.group();
+  	lasers.enableBody = true;
+  	lasers.physicsBodyType = Phaser.Physics.ARCADE;
+  
+  	// create lasers
+  	lasers.createMultiple(defaultLaserNumber, 'laser');
+  	lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
+  	lasers.setAll('anchor.y', 0.5);
+		
+	}  
+  
   function createCookie() {
     cookie = game.add.sprite(20, 20, 'cookie');
 		game.physics.arcade.enable(cookie);
@@ -403,6 +408,7 @@ function createAmmoText(){
         healthText.Text = shipHealth;
         scoreText.text = score;
         createCookie();
+        createLasers();
         createShip();
       }
     }
