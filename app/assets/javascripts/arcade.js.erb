@@ -1,4 +1,3 @@
-
 function gameStart() {
   
 	// our game function
@@ -24,7 +23,7 @@ function gameStart() {
 	var score = 0;
 	var scoreText;
 	
-	var shipHealth = 3;
+	var shipHealth;
 	var healthText;
 	
 	var asteroids;
@@ -73,8 +72,13 @@ function gameStart() {
 
 		// our ships lasers
 
+
 		laserCreate();
 		
+
+        //creating lasers
+		createLasers();
+
 		
 		// our ship
 		createShip();
@@ -87,21 +91,14 @@ function gameStart() {
 		asteroids.setAll('outOfBoundsKill', true);
 		asteroids.setAll('checkWorldBounds', true);
 		launchAsteroid();
-	
 		
 		createCookie();
 		
 		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		
-		// Create score text
-		createScore();
-		
-		//create health text
-		
-		createHealth();
-		
-		//create ammo text
-		createAmmo();
+		createScoreText();
+		createHealthText();
+		createAmmoText();
 
 		// game input
 		cursors = game.input.keyboard.createCursorKeys();
@@ -132,6 +129,8 @@ function gameStart() {
 	// update function: please place all update functions here
 	//
 	function update() {
+	  
+	  healthText.text = shipHealth;
 	  
 	  spaceBackground.tilePosition.y += 1;
 	  screenWrap(ship);
@@ -168,7 +167,7 @@ function gameStart() {
 		}
 
   	
-  // fire bullets if ship is alive	
+  // fire lasers if ship is alive	
   if (ship.alive) {
   	if (fireButton.isDown)
   		{
@@ -183,7 +182,7 @@ function gameStart() {
 		
 		
 		function fireLasers() {
-		    if (defaultLaserNumber > 0){
+		  if (defaultLaserNumber > 0){
 		  
 		 
 			if (game.time.now > laserTime) 
@@ -192,25 +191,22 @@ function gameStart() {
 				
 				if (laser)
 				{
-				    defaultLaserNumber--;
+				  defaultLaserNumber--;
 				    
-				        laser.scale.setTo(0.3, 0.3);
-					    laser.reset(ship.body.x + 40, ship.body.y + 13);
-                        laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
-                        laser.rotation = ship.rotation;
-                        game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-                        laserTime = game.time.now + laserSpeed;
+				  laser.scale.setTo(0.3, 0.3);
+					laser.reset(ship.body.x + 40, ship.body.y + 13);
+          laser.lifespan = laserLifeSpan; // how long the lasers last ( we can set a global variable for this)
+          laser.rotation = ship.rotation;
+          game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
+          laserTime = game.time.now + laserSpeed;
 
 				}
 			}
 		}else{
-		    ammoOut = game.add.text(game.world.centerX, game.world.centerY - 100, 'Out Of Bullets', {
-            font: "60px Gabriella",
-  		    fill: "#FFFFFF",
-  		    align: "center"
-    });
-    gameOver.anchor.setTo(0.5, 0.5);
-    gameOver.visible = false;
+		 
+    
+        gameOver.anchor.setTo(0.5, 0.5);
+        gameOver.visible = false;
 		}
 		ammoText.text = defaultLaserNumber;
 	}
@@ -299,6 +295,7 @@ function gameStart() {
     if(score == 20 || score == 35){
         shipHealth +=1;
     }
+    
     healthText.text = shipHealth;
     defaultLaserNumber += 1;
     ammoText.text = defaultLaserNumber;
@@ -315,7 +312,7 @@ function gameStart() {
   }
   
   // create score text
-  function createScore() {
+  function createScoreText() {
   	
   	gameScoreText = game.add.text(gameWidth - 150, 10, 'Score:', {
   		font: "28px Gabriella",
@@ -334,6 +331,7 @@ function gameStart() {
   }
   
   function createShip() {
+    shipHealth = 3;
     ship = game.add.sprite(game.world.centerX, game.world.centerY, 'spaceship'); // add shp to middle of the page
 		ship.anchor.setTo(0.5, 0.5); // anchor point will be the center of the ship
 		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
@@ -341,12 +339,24 @@ function gameStart() {
 		ship.body.maxVelocity.setTo(maxSpeed, maxSpeed);
   }
   
+	function createLasers() {
+  	lasers = game.add.group();
+  	lasers.enableBody = true;
+  	lasers.physicsBodyType = Phaser.Physics.ARCADE;
+  
+  	// create lasers
+  	lasers.createMultiple(defaultLaserNumber, 'laser');
+  	lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
+  	lasers.setAll('anchor.y', 0.5);
+		
+	}  
+  
   function createCookie() {
     cookie = game.add.sprite(20, 20, 'cookie');
 		game.physics.arcade.enable(cookie);
 		cookie.scale.setTo(.1, .1);
   }
-  function createHealth(){
+  function createHealthText(){
     
     gameHealthText = game.add.text(gameWidth - 450, 10, 'Health:', {
 		font: "28px Gabriella",
@@ -363,7 +373,7 @@ function gameStart() {
 	healthText.anchor.setTo(0.5, 0.5)
 }
 
-function createAmmo(){
+function createAmmoText(){
     
     gameAmmoText = game.add.text(gameWidth - 700, 10, 'Ammo:', {
 		font: "28px Gabriella",
@@ -408,9 +418,9 @@ function createAmmo(){
         defaultLaserNumber = 5;
         laserSpeed = defaultLaserSpeed;
         healthText.Text = shipHealth;
-        scoreText.text = '3';
-
+        scoreText.text = score;
         createCookie();
+        createLasers();
         createShip();
       }
     }
