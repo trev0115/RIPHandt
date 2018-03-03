@@ -1,11 +1,19 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import url('https://fonts.googleapis.com/css?family=Bangers|Press+Start+2P|Russo+One');
+
+$title_font: "Press Start 2P";
+$table_header_font: "Bangers";
+$table_row_font: "Russo One";
+
+
 html {
     background-color:#77c298;
 }
 
-html,body{
+html, body{
     height: 100%;
 }
 
@@ -18,7 +26,51 @@ body {
     border:3px solid #6bbdae;
     background-color: #ffffff;
     box-shadow: 10px 10px grey;
-    text-align: center;  
+}
+
+#title {
+  font-family: $title_font;
+  font-size: 2.5em;
+  text-align: center;
+}
+
+#leaderboard_title_top10, #leaderboard_title_alltime {
+  font-family: $title_font;
+  font-size: 1.5em;
+  line-height: 30px;
+}
+
+#leaderboard_top10_content {
+  width: 400px;
+  position: relative;
+  right: 425px;
+  text-align: center;
+  top: 65px;
+}
+
+#leaderboard_top10, #leaderboard_alltime {
+  margin: 0 auto;
+}
+
+#leaderboard_top10 > tbody > tr > th, #leaderboard_alltime > tbody > tr > th {
+  font-size: 1.9em;
+  font-family: $table_header_font;
+  letter-spacing: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#leaderboard_top10 > tbody > tr, #leaderboard_alltime > tbody > tr {
+  font-size: 1.2em;
+  font-family: $table_row_font;
+}
+
+#leaderboard_alltime_content {
+  width: 400px;
+  position: relative;
+  left: 1025px;
+  bottom: 340px;
+  text-align: center;
 }
 
 div#gameDiv{
@@ -26,4 +78,17 @@ div#gameDiv{
     margin-left: auto;
     margin-right: auto;
     box-shadow: 10px 10px grey;
+}
+
+canvas {
+  position: relative;
+  margin-top: 15px;
+  margin: 0 auto;
+  bottom: 750px;
+}
+
+#sign_in {
+  position: relative;
+  right: 890px;
+  top: 100px;
 }

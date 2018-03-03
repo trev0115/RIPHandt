@@ -14,24 +14,47 @@
 
 <body>
 
-  <h1>Game Home Page</h1>
+  <h1 id="title">Asteroids</h1>
   
   <div id="gameDiv"></div>
   
-  <h1>Leaderboards:</h1>
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Score</th>
-      <th colspan="2">&nbsp;</th>
-    </tr>
+  <div id="leaderboard_top10_content">
+    <h1 id="leaderboard_title_top10">Leaderboard - Top 10:</h1>
     
-    <% @scores.limit(10).order('score desc').each do |score| %> 
+    <table id="leaderboard_top10">
       <tr>
-        <td><%= score.user.name %></td>
-        <td><%= score.score %></td> 
+        <th>Name</th>
+        <th>Score</th>
+        <th colspan="2">&nbsp;</th>
       </tr>
-    <% end %>
-   </table>
-   
+      
+      <% @scores.limit(10).order('score desc').each do |score| %> 
+        <tr>
+          <td><%= score.user.name %></td>
+          <td><%= score.score %></td> 
+        </tr>
+      <% end %>
+    
+    </table>
+  </div>
+  
+  <div id="leaderboard_alltime_content">
+    <h1 id="leaderboard_title_alltime">Leaderboard - Alltime:</h1>
+    
+    <table id="leaderboard_alltime">
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+        <th colspan="2">&nbsp;</th>
+      </tr>
+      
+      <% @scores.order('score desc').each do |score| %> 
+        <tr>
+          <td><%= score.user.name %></td>
+          <td><%= score.score %></td> 
+        </tr>
+      <% end %>
+    
+    </table>
+  </div>
 </body>
