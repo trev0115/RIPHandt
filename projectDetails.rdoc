@@ -21,5 +21,6 @@ google user social media authentication
 more lives based on points
 arrow keys + spacebar
 
+rake db:drop db:create db:migrate db:seed
 
 

@@ -1,5 +1,3 @@
-
-
 function gameStart() {
   
 	// our game function
@@ -13,19 +11,32 @@ function gameStart() {
 
 	var laser;
 	var lasers;
-	var laserLifeSpan = 1500;  
+	var laserLifeSpan = 1500;
+	var defaultLaserSpeed = 500;
+	var laserSpeed = 500;
 	
 	var defaultShipSize = .25;
 	
 	var points = 0;
-	var defaultLaserNumber = 10;
+	var defaultLaserNumber = 20;
 	
 	var score = 0;
 	var scoreText;
 	
+	var asteroids;
+	
+	var cookie;
+	var numCookies = 10;
+	
+	var fireButton;
+	
+	var shipSpeed = 200;
+	var maxSpeed = 400;
+	
+	var sheilds;
 
 	// phaser version 2.10.1 available at https://phaser.io/download/release/2.10.1
-	var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render });
+	var game = new Phaser.Game(gameWidth, gameHeight, Phaser.CANVAS, '', { preload: preload, create: create, update: update, render: render});
 	
 
 	//
@@ -36,7 +47,7 @@ function gameStart() {
 		game.load.image('space', '<%= asset_path('space.png') %>');
 		game.load.image('laser', '<%= asset_path('laser.png') %>');
 		game.load.image('spaceship', '<%= asset_path('spaceship.png') %>');
-
+    game.load.image('cookie', '<%= asset_path('cookie.png') %>');
     game.load.image('asteroid', '<%= asset_path('asteroid.png') %>');
 
 	} // end of preload()
@@ -54,7 +65,7 @@ function gameStart() {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		// create a background
-		game.add.tileSprite(0, 0, game.width, game.height, 'space');
+		spaceBackground = game.add.tileSprite(0, 0, game.width, game.height, 'space');
 
 		// our ships lasers
 		lasers = game.add.group();
@@ -65,15 +76,23 @@ function gameStart() {
 		lasers.createMultiple(defaultLaserNumber, 'laser');
 		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
 		lasers.setAll('anchor.y', 0.5);
-
-		// our ship
-		ship = game.add.sprite(gameHeight/2, gameWidth/2, 'spaceship'); // add shp to middle of the page
-		ship.anchor.set(0.5); // anchor point will be the center of the ship
-		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
-		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
 		
-		asteroid = game.add.sprite(Math.random()*900, Math.random()*500, 'asteroid');
-	  game.physics.arcade.enable(asteroid);
+		// our ship
+		createShip();
+    
+		// asteroids
+		asteroids = game.add.group();
+		asteroids.enablebody = true;
+		asteroids.physicsBodyType = Phaser.Physics.ARCADE;
+		asteroids.createMultiple(8, 'asteroid');
+		asteroids.setAll('outOfBoundsKill', true);
+		asteroids.setAll('checkWorldBounds', true);
+		launchAsteroid();
+	
+		
+		createCookie();
+		
+		fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		
 		// Create score text
 		createScore();
@@ -82,7 +101,22 @@ function gameStart() {
 		cursors = game.input.keyboard.createCursorKeys();
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
-
+    //Game Over
+    gameOver = game.add.text(game.world.centerX, game.world.centerY - 100, 'GAME OVER', {
+      font: "78px Gabriella",
+  		fill: "#FFFFFF",
+  		align: "center"
+    });
+    gameOver.anchor.setTo(0.5, 0.5);
+    gameOver.visible = false;
+    
+    spaceToRestart = game.add.text(game.world.centerX, game.world.centerY + 100, 'Press Mouse Button to Restart', {
+      font: "50px Gabriella",
+  		fill: "#FFFFFF",
+  		align: "center"
+    });
+    spaceToRestart.anchor.setTo(0.5, 0.5);
+    spaceToRestart.visible = false;
 
 
 	} // end of create()
@@ -92,16 +126,19 @@ function gameStart() {
 	// update function: please place all update functions here
 	//
 	function update() {
-	    
-	    game.physics.arcade.moveToObject(asteroid, ship, 50);
+	  
+	  spaceBackground.tilePosition.y += 1;
+	  screenWrap(ship);
+	  
+	  
+	  //game.physics.arcade.moveToObject(asteroid, ship, 50);
 
 		
 		// when pressing up, we go forward, we need to face backwards and press up to slow down
-		
-		
 		if (cursors.up.isDown) 
 		{
 				game.physics.arcade.accelerationFromRotation(ship.rotation, 200, ship.body.acceleration);
+				
 		}
 		
 		else
@@ -111,12 +148,13 @@ function gameStart() {
 
 		if (cursors.left.isDown)
 		{
-				ship.body.angularVelocity = -200;
+				ship.body.angularVelocity = -shipSpeed;
+				
 			
 		}
 		else if (cursors.right.isDown)
 		{
-				ship.body.angularVelocity = 200;
+				ship.body.angularVelocity = shipSpeed;
 		}
 		else
 		{
@@ -124,16 +162,16 @@ function gameStart() {
 		}
 
   	
-  if (ship.visible) {
-  	
-  	if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+  // fire bullets if ship is alive	
+  if (ship.alive) {
+  	if (fireButton.isDown)
   		{
   				fireLasers();
   		}
   }
  
   	
-		screenWrap(ship);
+		
 
 		lasers.forEachExists(screenWrap, this);
 		
@@ -147,22 +185,43 @@ function gameStart() {
 				if (laser)
 				{
 				    
-				    laser.scale.setTo(0.3, 0.3);
+				  laser.scale.setTo(0.3, 0.3);
 					laser.reset(ship.body.x + 40, ship.body.y + 13);
                     laser.lifespan = laserLifeSpan; // how long the bullets last ( we can set a global variable for this)
                     laser.rotation = ship.rotation;
                     game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
-                  laserTime = game.time.now + 50;
+                  laserTime = game.time.now + laserSpeed;
 				}
 			}
 		}
 		
-		game.physics.arcade.overlap(lasers, asteroid, bulletCollider, null, this);
-		game.physics.arcade.overlap(ship, asteroid, collisionHandler, null, this); 
+		game.physics.arcade.overlap(lasers, asteroids, bulletCollider, null, this);
+		game.physics.arcade.overlap(ship, asteroids, collisionHandler, null, this); 
+		game.physics.arcade.overlap(ship, cookie, powerUpCookie, null, this);
 		
+		// Game Over message
+		if (! ship.alive) {
+		  gameOver.visible = true;
+		  cookie.kill();
+		  spaceToRestart.visible = true;
+		   
+		}
+		
+		game.physics.arcade.moveToXY(cookie, game.world.centerX, 800, 100);
+		
+		restart();
 	
 
 	} // end of update()
+	
+	
+	//
+	// render()
+	//
+	
+	function render() {
+	  // nothing to see here
+	}
 	
 	// screenWrap
 	function screenWrap (sprite) {
@@ -184,48 +243,101 @@ function gameStart() {
     {
         sprite.y = 0;
     }
-
+    
 }// end of of screenWrap
 
-function collisionHandler(spaceship, asteroid) {
-  spaceship.kill();
-  asteroid.kill();
-}
+  function collisionHandler(spaceShip, asteroid) {
+    spaceShip.kill();
+    asteroid.kill();
+    
+  }
+  
+  function bulletCollider(lasers, asteroid) {
+    lasers.kill();
+    asteroid.kill();
+    score +=1;
+    scoreText.text = score;
+    console.log("points = " + score);
+  }
+  
+  function powerUpCookie(ship, cookie) {
+    cookie.kill();
+    laserSpeed = 100;
+    
+    
+  }
+  
+  // create score text
+  function createScore() {
+  	
+  	gameScoreText = game.add.text(gameWidth - 150, 10, 'Score:', {
+  		font: "28px Gabriella",
+  		fill: "#FFFFFF",
+  		align: "left"
+  	});
+  	
+  	scoreText = game.add.text(gameWidth - 50, 30, '0', {
+  		font: "28px Gabriella",
+  		fill: "#FFFFFF",
+  		align: "center"
+  	});
+  	
+  	scoreText.anchor.setTo(0.5, 0.5);
+  	
+  }
+  
+  function createShip() {
+    ship = game.add.sprite(game.world.centerX, game.world.centerY, 'spaceship'); // add shp to middle of the page
+		ship.anchor.setTo(0.5, 0.5); // anchor point will be the center of the ship
+		ship.scale.setTo(defaultShipSize, defaultShipSize); // this controls the size of the ship compared to our .png file
+		game.physics.enable(ship, Phaser.Physics.ARCADE); // enable physcis for ship
+		ship.body.maxVelocity.setTo(maxSpeed, maxSpeed);
+  }
+  
+  function createCookie() {
+    cookie = game.add.sprite(20, 20, 'cookie');
+		game.physics.arcade.enable(cookie);
+		cookie.scale.setTo(.1, .1);
+  }
 
-function bulletCollider(lasers, asteroid) {
-  lasers.kill();
-  asteroid.kill();
-  score +=1;
-  scoreText.text = score;
-  console.log("pionts = " + score);
-}
-
-// create score text
-function createScore() {
-	
-	gameScoreText = game.add.text(gameWidth - 150, 10, 'Score:', {
-		font: "28px Gabriella",
-		fill: "#FFFFFF",
-		align: "left"
-	});
-	
-	scoreText = game.add.text(gameWidth - 50, 30, '0', {
-		font: "28px Gabriella",
-		fill: "#FFFFFF",
-		align: "center"
-	});
-	
-	scoreText.anchor.setTo(0.5, 0.5);
-	
-}
-
-
-	//
-	// render function
-	//
-
-	function render() {
-
-	} // end of render()
+  function launchAsteroid() {
+    var asteroidSpeed = 200;
+    var minAsteroidSpawn = 300;
+    var maxAsteroidSpawn = 3000;
+    
+    
+    var asteroid = asteroids.getFirstExists(false);
+    game.physics.arcade.enable(asteroid);
+    if (asteroid) {
+      asteroid.reset(game.rnd.integerInRange(0, game.width), -20);
+      asteroid.body.velocity.x = game.rnd.integerInRange(-300, 300);
+      asteroid.body.velocity.y = asteroidSpeed;
+    }
+    
+    game.time.events.add(game.rnd.integerInRange(minAsteroidSpawn, maxAsteroidSpawn), launchAsteroid);
+    
+  }
+  
+  function restart() {
+    if (!ship.alive) {
+      if (game.input.activePointer.leftButton.isDown) {
+        gameOver.visible = false;
+        spaceToRestart.visible = false;
+        score = 0;
+        laserSpeed = defaultLaserSpeed;
+        scoreText.text = score;
+        createCookie();
+        createShip();
+      }
+    }
+  }
+  
+  
 
 }// end of gameStart()
+
+
+
+
+
+
