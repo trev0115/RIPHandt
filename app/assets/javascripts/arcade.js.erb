@@ -13,7 +13,7 @@ function gameStart() {
 	var laser;
 	var lasers;
 	var laserLifeSpan = 1200;
-	var defaultLaserSpeed = 500;
+	var defaultLaserSpeed = 100;
 	var laserSpeed = 500;
 	
 	var defaultShipSize = .25;
@@ -76,10 +76,15 @@ function gameStart() {
 		lasers.enableBody = true;
 		lasers.physicsBodyType = Phaser.Physics.ARCADE;
 
+
+
+
 		// create 10 bullets
 		lasers.createMultiple(defaultLaserNumber, 'laser');
 		lasers.setAll('anchor.x', 0.5); // makes the center point of the png the "anchor point"
 		lasers.setAll('anchor.y', 0.5);
+		
+		
 		
 		// our ship
 		createShip();
@@ -188,6 +193,8 @@ function gameStart() {
 		
 		
 		function fireLasers() {
+		    if (defaultLaserNumber > 0){
+		  
 		 
 			if (game.time.now > laserTime) 
 			{
@@ -195,6 +202,7 @@ function gameStart() {
 				
 				if (laser)
 				{
+				    defaultLaserNumber--;
 				    
 				        laser.scale.setTo(0.3, 0.3);
 					    laser.reset(ship.body.x + 40, ship.body.y + 13);
@@ -202,11 +210,22 @@ function gameStart() {
                         laser.rotation = ship.rotation;
                         game.physics.arcade.velocityFromRotation(ship.rotation, 400, laser.body.velocity);
                         laserTime = game.time.now + laserSpeed;
-                        //ammoText.text = default
 
 				}
 			}
+		}else{
+		    laser = lasers.kill();
+		    ammoOut = game.add.text(game.world.centerX, game.world.centerY - 100, 'Out Of Bullets', {
+            font: "60px Gabriella",
+  		    fill: "#FFFFFF",
+  		    align: "center"
+    });
+    gameOver.anchor.setTo(0.5, 0.5);
+    gameOver.visible = false;
 		}
+		ammoText.text = defaultLaserNumber;
+	}
+
 		
 		game.physics.arcade.overlap(lasers, asteroids, bulletCollider, null, this);
 		game.physics.arcade.overlap(ship, asteroids, collisionHandler, null, this); 
@@ -272,10 +291,7 @@ function gameStart() {
      healthText.text = shipHealth;
     
   }
-  function killShip(){
-      spaceShip.kill();
-  }
-  
+
   function bulletCollider(lasers, asteroid) {
     lasers.kill();
     asteroid.kill();
@@ -286,6 +302,8 @@ function gameStart() {
         shipHealth +=1;
     }
     healthText.text = shipHealth;
+    defaultLaserNumber += 1;
+    ammoText.text = defaultLaserNumber;
     
   }
   
@@ -294,7 +312,8 @@ function gameStart() {
     laserSpeed = 100;
     shipHealth += 2;
     healthText.text = shipHealth;
-    
+    defaultLaserNumber += 5;
+    ammoText.text = defaultLaserNumber;
   }
   
   // create score text
@@ -339,7 +358,7 @@ function gameStart() {
 	
 	healthText = game.add.text(gameWidth - 350, 32 , shipHealth, {
 		font: "28px Gabriella",
-		fill: "#FFFFFF",
+		fill: "red",
 		align: "center"
 	});
 	
@@ -356,7 +375,7 @@ function createAmmo(){
 	
 	ammoText = game.add.text(gameWidth - 600, 32 , defaultLaserNumber, {
 		font: "28px Gabriella",
-		fill: "#FFFFFF",
+		fill: "blue",
 		align: "center"
 	});
 	
