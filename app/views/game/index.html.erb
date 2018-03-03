@@ -12,11 +12,13 @@
 </div>
 
 <h1>Game Home Page</h1>
+
+<div id="gameDiv"></div>
+
 <h1>Leaderboards:</h1>
 <table>
   <tr>
     <th>Name</th>
-    <th>Email</th>
     <th>Score</th>
     <th colspan="2">&nbsp;</th>
   </tr>
@@ -24,9 +26,8 @@
   <% @scores.limit(10).order('score desc').each do |score| %> 
   <tr>
     <td><%= score.user.name %></td>
-    <td>@email.com></td>
     <td><%= score.score %></td> 
   </tr>
   <% end %>
  </table>
-<div id="gameDiv"></div>
+
