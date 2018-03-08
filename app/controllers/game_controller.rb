@@ -11,10 +11,6 @@ class GameController < ApplicationController
   end
 
   def tweet_user_highscore
-    @user_top_score = @scores.user_id.find(current_user.id).order('score desc').limit(1)
-    @tweet = Tweet.new(@user_top_score.score)
-    @tweet.user_id = current_user.id 
-    @tweet.save
-    respond_with(@tweet)
+    current_user.twitter.update(test)  
   end
 end
