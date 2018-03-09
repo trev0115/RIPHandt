@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :score
+  has_many :scores
   
   def self.find_or_create_from_auth_hash(auth_hash)
     # lookup user or create
@@ -13,6 +13,12 @@ class User < ActiveRecord::Base
 
     )
     user
+  end
+
+  def top_score
+    user_scores = Score.where(user: self.id)
+    top_score = user_scores.order('scores.score DESC')
+    return top_score.first.score
   end
 
   def twitter

@@ -3,7 +3,7 @@
 
   <div id="google">
       <% if current_user %>
-        <%= image_tag(current_user.profile_image) %>
+        <%= image_tag(current_user.profile_image, width: "50", height: "50", class: 'img-circle' ) %>
         Signed in as <strong><%= current_user.name %></strong>!
         <%= link_to "Sign out", signout_path, id: "sign_out" %>
         <%= link_to "Tweet Score", tweet_path, id: "user_top_score" %>
