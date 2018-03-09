@@ -18,7 +18,7 @@ scores =  Score.create([
         {user_id: 1, score: 99}, 
         {user_id: 1, score: 123}, 
         {user_id: 1, score: 333},
-        {user_id: 7, score: 4000}])
+        {user_id: 7, score: 5000}])
         
 users = User.create([
         {name: 'Jill'}, 
