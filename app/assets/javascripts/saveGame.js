@@ -32,7 +32,7 @@ var saveGame = {
 
     });
 
-  }
+  },
 
   sendEndGameScore : function ( score  ) {
 
