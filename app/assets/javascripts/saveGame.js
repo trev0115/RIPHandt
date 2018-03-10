@@ -13,24 +13,45 @@ var saveGame = {
 
   sendGameSave : function( lives, ammo, score) {
 
-  $.ajax({
+    $.ajax({
 
-    url: "/saveGame",
-    type: "get",
-    data: {
-      user_lives : lives,
-      user_ammo : ammo,
-      user_score : score
-    },
+      url: "/saveGame",
+      type: "get",
+      data: {
+        user_lives : lives,
+        user_ammo : ammo,
+        user_score : score
+      },
 
-    success : function() {
-      console.log("saved");
-    },
-    error: function( xhr, status, error ) {
-      console.log(xhr);
-    }
+      success : function() {
+        console.log( "saved" );
+      },
+      error: function( xhr, status, error ) {
+        console.log( xhr );
+      }
 
-  });
+    });
+
+  }
+
+  sendEndGameScore : function ( score  ) {
+
+    $.ajax({
+      url: "/endGame",
+      type: "get",
+      data: {
+        user_score : score
+      },
+
+      success : function() {
+        console.log("saved");
+
+      },
+
+      error: function( xhr, status, error ) {
+        console.log( xhr ); 
+      }
+    });
 
   }
 }
