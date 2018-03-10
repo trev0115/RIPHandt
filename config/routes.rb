@@ -3,6 +3,7 @@ RIPHandt::Application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'signout', to: 'sessions#destroy', as: 'signout'
   get 'tweet', to: 'game#tweet_user_highscore', as: 'tweet'
+  get '/saveGame', controller: 'savegame', action: 'saveGame'
   resources :sessions, only: [:create, :destroy]
   resource :home, only: [:show]
 
