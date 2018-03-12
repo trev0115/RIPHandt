@@ -4,10 +4,26 @@
 
 #google {
   position: absolute;
-  top: 0;
-  right: 0;
+  margin: 0 auto;
+  left: 40px;
+  top: 25px;
+  
+  @media only screen and (max-width: 1900px) {
+    position: relative;
+    top: 115px;
+    left: 25px;
+  }
+
 }
 
-.img-circle {
+#google > .img-circle {
   border-radius: 50%;
+  position: relative;
+  top: 15px;
+  right: 10px;
+}
+
+sign_in {
+  position: relative;
+  left: 25px;
 }

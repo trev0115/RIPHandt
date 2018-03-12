@@ -28,6 +28,15 @@ body {
     box-shadow: 10px 10px grey;
 }
 
+body > div {
+  height: 45px;
+  margin: 0 auto;
+  
+  @media only screen and (max-width: 1900px) {
+    height: 125px
+  }
+}
+
 #title {
   font-family: $title_font;
   font-size: 2.5em;
@@ -42,10 +51,16 @@ body {
 
 #leaderboard_top10_content {
   width: 400px;
-  position: relative;
-  right: 425px;
+  position: absolute;
+  left: 35px;
+  top: 135px;
   text-align: center;
-  top: 65px;
+  
+  @media only screen and (max-width: 1900px) {
+    left: 55px;
+    top: 925px;
+  }
+
 }
 
 #leaderboard_top10, #leaderboard_alltime {
@@ -67,10 +82,16 @@ body {
 
 #leaderboard_alltime_content {
   width: 400px;
-  position: relative;
-  left: 1025px;
-  bottom: 340px;
+  position: absolute;
+  right: 35px;
+  top: 135px;
   text-align: center;
+  
+  @media only screen and (max-width: 1900px) {
+    top: 925px;
+    right: 55px;
+  }
+
 }
 
 div#gameDiv{
@@ -82,13 +103,7 @@ div#gameDiv{
 
 canvas {
   position: relative;
-  margin-top: 15px;
   margin: 0 auto;
-  bottom: 750px;
+  top: 50px;
 }
 
-#sign_in {
-  position: relative;
-  right: 890px;
-  top: 100px;
-}
