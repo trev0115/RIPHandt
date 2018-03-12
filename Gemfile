@@ -28,6 +28,7 @@ gem "omniauth-google-oauth2", "~> 0.2.1"
 
 # gem for twitter authentication
 gem "omniauth-twitter", "~> 1.1.0"
+gem 'twitter', "~> 5.13.0"
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
