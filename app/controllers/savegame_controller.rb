@@ -1,10 +1,11 @@
 class SavegameController < ActionController::Base
   def endGame
-    user_score = [arams[ :user_score ]]
+    user_score = params[:user_score]
     score = Score.create(user_id: session[:user_id], score: user_score)
+    score.save
     if score.save
       respond_to do |format|
-        format.html {redirect_to root_path}
+        format.json {redirect_to root_path}
       end
     end
   end

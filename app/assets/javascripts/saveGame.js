@@ -44,7 +44,7 @@ var saveGame = {
       },
 
       success : function() {
-        console.log("saved");
+        console.log("saved" + score);
 
       },
 
